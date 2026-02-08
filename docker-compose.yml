@@ -1,0 +1,44 @@
+services:
+  3proxy1:
+    build: ./3proxy
+    container_name: 3proxy1
+    restart: unless-stopped
+    volumes:
+      - ./config:/etc/3proxy
+    ports:
+      - "19999:9999"   # Админка 3proxy1
+    networks:
+      - proxy-network
+  
+  3proxy2:
+    build: ./3proxy
+    container_name: 3proxy2
+    restart: unless-stopped
+    volumes:
+      - ./config:/etc/3proxy
+    ports:
+      - "29999:9999"   # Админка 3proxy2
+    networks:
+      - proxy-network
+  
+  nginx-balancer:
+    image: nginx:alpine
+    container_name: nginx-balancer
+    restart: unless-stopped
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "18080:18080"
+      - "11080:11080"
+      - "13128:13128"
+      - "11081:11081"
+      - "8080:80"
+    depends_on:
+      - 3proxy1
+      - 3proxy2
+    networks:
+      - proxy-network
+
+networks:
+  proxy-network:
+    driver: bridge
