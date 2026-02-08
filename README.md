@@ -24,7 +24,7 @@
 ### Установка
 
 ```bash
-git clone https://github.com/вantonpochinkin-bit/3proxy-production.git
+git clone https://github.com/antonpochinkin-bit/3proxy-production.git
 cd 3proxy-production
 docker-compose up -d
 docker-compose ps
